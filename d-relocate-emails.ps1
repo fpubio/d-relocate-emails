@@ -92,7 +92,7 @@ $ourfilter = "[SentOn] > '$ourdate'"
 
 $newEmails = $inbox_items.Restrict($ourfilter)
 
-if ($verbosep) { Write-Host $newEmails.count }
+if ($verbosep) { "{0} emails under consideration" -f $newEmails.count | Write-Host }
 
 $from_rules = New-Object System.Collections.Generic.List[System.Object]
 $subject_rules = New-Object System.Collections.Generic.List[System.Object]
@@ -132,6 +132,7 @@ foreach ($email in $newEmails){
         $destination_folder_name = $subject_rule[1]
         $emailsubject = $email.Subject
         if ($emailsubject -like "*$rule_subject*"){
+	    if ($verbosep) { "matched on {0}" -f $emailsubject | Write-Host }
             # Only support target folders which are directly
             # accessible via the top-level folder
             $destination_folder = $current_mailbox.Folders($destination_folder_name)
@@ -155,6 +156,7 @@ foreach ($email in $newEmails){
         # FIXME: we should almost certaily be using an exact match here, not -like w/wildcards
         if (($from_sendername -like "*$rule_from*") -or
             ($from_senderemailaddress -like "*$rule_from*")) {
+		if ($verbosep) { "matched on {0} or {1}" -f $from_sendername,$from_senderemailaddress | Write-Host  }
                 $destination_folder = $current_mailbox.Folders($destination_folder_name)
                 # Move email
                 $email.move($destination_folder) | Out-Null
