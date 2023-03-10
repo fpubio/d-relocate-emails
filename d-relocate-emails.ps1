@@ -136,7 +136,7 @@ foreach ($email in $newEmails){
             # accessible via the top-level folder
             $destination_folder = $current_mailbox.Folders($destination_folder_name)
             # Move emails
-            $email.move($destination_folder)
+            $email.move($destination_folder) | Out-Null
             # Add the moved email to list to record later
             $email| add-member -MemberType NoteProperty -Name "Folderpath" -Value $destination_folder
             $timestamp = Get-Date
@@ -157,7 +157,7 @@ foreach ($email in $newEmails){
             ($from_senderemailaddress -like "*$rule_from*")) {
                 $destination_folder = $current_mailbox.Folders($destination_folder_name)
                 # Move email
-                $email.move($destination_folder)
+                $email.move($destination_folder) | Out-Null
                 # Add the moved email to list to record later
                 $email| add-member -MemberType NoteProperty -Name "Folderpath" -Value $destination_folder
                 $timestamp = Get-Date
